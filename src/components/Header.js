@@ -3,11 +3,14 @@ import PropTypes from 'prop-types'
 import Button from './Button';
 import { useLocation } from 'react-router-dom';
 
-const Header = ({title,handleShowTask,showTask}) => {
+
+const Header = ({title,showTask,handleShowTask}) => {
   const text = "Add"
   const color = "green"
   
   const location = useLocation();
+
+
     return (
     
       <header className='header'>

@@ -17,3 +17,6 @@
             day: 'Feb 5th at 12:30pm',
             reminder:false,
         }
+
+
+tasks.filter(task => ((task.text).toLowerCase()).includes(search.toLowerCase()))

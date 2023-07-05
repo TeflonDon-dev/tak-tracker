@@ -5,16 +5,20 @@ import AddTask from './components/AddTask'
 import Footer from './components/Footer'
 import SearchTask from './components/SearchTask';
 import { Route,Routes } from 'react-router-dom'
-import About from './components/About'
+import About from './components/About';
+import{ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const App = () => {
 
-  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasksList")) || []);
+  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasksList"))||[]);
 
   useEffect(() => {
-      localStorage.setItem("tasksList",JSON.stringify(tasks))
-    },[tasks])
+
+       localStorage.setItem("tasksList",JSON.stringify(tasks))
+    
+  }, [tasks])
 
   const handleAddTask = (task) => {
     const id = new Date().getTime().toString();
@@ -31,33 +35,56 @@ const App = () => {
     setTasks(reminder);
   }
 
-  const [showTask, setShowTask] = useState(true);
 
   const [search, setSearch] = useState('');
  
-  const handleShowTask = () => {
+  
+  const [showTask, setShowTask] = useState(true);
+
+ const handleShowTask = () => {
     setShowTask(!showTask);
-}
+  }
+
+  const [searchResults, setSearchResults] = useState([]);
+  
+  useEffect(() => {
+    const filteredResults = tasks.filter(task => ((task.text).toLowerCase()).includes(search.toLowerCase()) ||
+  ((task.day).toLowerCase()).includes(search.toLowerCase()));
+    setSearchResults(filteredResults.reverse());
+  },[tasks,search])
 
   return (
    
     <div className='container'>
-      <Header handleShowTask={handleShowTask} showTask={showTask} />
-      
+     
+      <Header showTask={showTask} handleShowTask={handleShowTask} />
+    
       <Routes>
         <Route path='/' exact element={(
           <>
-          {showTask && <AddTask handleAddTask={handleAddTask} />}
-      {tasks.length ? <SearchTask search={search} setSearch={setSearch} /> : null}
+            <AddTask handleAddTask={handleAddTask} showTask={showTask} />
+            <SearchTask search={search} setSearch={setSearch} tasks={tasks} />
       
-        
-      {tasks.length ? <Tasks tasks={tasks.filter(task => ((task.text).toLowerCase()).includes(search.toLowerCase()))} handleDelete={handleDelete} handleReminder={handleReminder} /> : <p>No tasks to display</p>}
+            {searchResults.length ?
+              <Tasks tasks={searchResults} handleDelete={handleDelete} handleReminder={handleReminder} /> : <p>No tasks to display</p>}
       
           </>
         )}/>
         <Route path='/about' element={<About />} />
         </Routes>
-      <Footer/>
+      <Footer />
+      <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
       </div>
       
   )
