@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { FaTwitter,FaGithub,FaWhatsapp } from 'react-icons/fa';
+import { FaTwitter,FaGithub,FaWhatsapp,FaHome } from 'react-icons/fa';
 const About = () => {
   return (
       <>
@@ -17,7 +17,7 @@ const About = () => {
                  
             </div>
         
-          <Link to="/">Home</Link>
+          <Link to="/">< FaHome style={{height:"30px",width:"30px"}}/></Link>
     </>
   )
 }
